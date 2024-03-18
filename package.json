@@ -26,7 +26,8 @@
     "@tanstack/react-table": "^8.13.2",
     "gh-pages": "^6.1.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-papaparse": "^4.4.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.64",
