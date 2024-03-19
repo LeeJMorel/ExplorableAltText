@@ -1,0 +1,17 @@
+//theme helpers allow us to add themes that can be easily changed. this is useful for building high contrast accessibility tools as optional
+
+@import "./darkTheme.scss";
+@import "./lightTheme.scss";
+@import "./palette";
+
+$prefix: "--"; //Prefix string for custom CSS properties
+
+//Merges a variable name with $prefix
+@function custom-property-name($name) {
+  @return $prefix + $name;
+}
+
+// Defines a custom property
+@mixin define-custom-property($name, $value) {
+  #{custom-property-name($name)}: $value;
+}

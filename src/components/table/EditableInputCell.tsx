@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
-import { useEditableCell } from "../hooks/useEditableCell";
-import { Person } from "../types";
+import { useEditableCell } from "../../hooks/useEditableCell";
+import { Person } from "../../types";
 
 interface EditableCellProps {
   getValue: () => any;

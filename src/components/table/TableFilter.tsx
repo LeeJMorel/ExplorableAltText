@@ -1,5 +1,5 @@
 import { Column, Table } from "@tanstack/react-table";
-import { Person } from "../types";
+import { Person } from "../../types";
 
 function TableFilter({
   column,

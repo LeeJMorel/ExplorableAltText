@@ -7,7 +7,7 @@ import { Header, flexRender } from "@tanstack/react-table";
 // needed for row & cell level scope DnD setup
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Person } from "../types";
+import { Person } from "../../types";
 
 const DraggableTableHeader = ({
   header,
