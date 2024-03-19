@@ -14,8 +14,7 @@ import {
   useReactTable,
   flexRender,
 } from "@tanstack/react-table";
-import { Person } from "../../types";
-import { makeData } from "../../makeData";
+import { Person, makeData } from "../../utilities";
 import EditableInputCell from "./EditableInputCell";
 import TableFilter from "./TableFilter";
 

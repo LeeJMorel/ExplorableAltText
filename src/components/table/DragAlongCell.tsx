@@ -5,7 +5,7 @@ import { Cell, flexRender } from "@tanstack/react-table";
 // needed for row & cell level scope DnD setup
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Person } from "../../types";
+import { Person } from "../../utilities/types";
 
 const DragAlongCell = ({ cell }: { cell: Cell<Person, unknown> }) => {
   const { isDragging, setNodeRef, transform } = useSortable({
