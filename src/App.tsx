@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-import "./index.scss";
+import styles from "./App.module.scss";
+import classNames from "classnames";
 
 import NavBar from "./components/navBar/NavBar";
 import Home from "./pages/Home";
@@ -7,9 +8,16 @@ import Team from "./pages/Team";
 import Projects from "./pages/Projects";
 import Footer from "./components/footer/Footer";
 
+function determineTheme() {
+  const storedTheme = localStorage.getItem("theme");
+  return storedTheme || "light"; // Default to light theme if no preference is stored
+}
+
+const theme = determineTheme();
+
 function App() {
   return (
-    <>
+    <div className={classNames(styles.app, styles[theme])}>
       <NavBar />
       <main>
         <Routes>
@@ -19,7 +27,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
 

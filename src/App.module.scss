@@ -1,1 +1,41 @@
+@import "./styles/variables.scss";
+@import "./styles/themeHelpers.scss";
 
+/* Allow access to color palette variables directly. */
+:root {
+  @each $name, $value in $colorPalette {
+    @include define-custom-property($name, $value);
+  }
+}
+
+/* Take up the full size of the screen. */
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+/* Our main component, this takes up the full screen .
+This consists of two main objects, the header and the content*/
+.app {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--bodyBackground);
+  color: var(--bodyText);
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+  &.light {
+    @each $name, $value in $lightTheme {
+      @include define-custom-property($name, $value);
+    }
+  }
+
+  &.dark {
+    @each $name, $value in $darkTheme {
+      @include define-custom-property($name, $value);
+    }
+  }
+}
