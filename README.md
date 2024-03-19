@@ -1,30 +1,52 @@
-# React + TypeScript + Vite
+# Explorable Alt Text
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Explorable Alt Text is a research project aimed at providing flexible authoring options for tabular data to enhance accessibility for blind and low vision users. This project enables users to explore and analyze tabular data using alternative text descriptions.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Flexible authoring options for tabular data
+- Enhanced accessibility for blind and low vision users
+- Interactive exploration and analysis of data
+- User-friendly interface for data examination
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+To run the project locally, follow these steps:
 
-- Configure the top-level `parserOptions` property like this:
+1. Clone this repository to your local machine:
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+`git clone https://github.com/your-username/explorable-alt-text.git`
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+2. Navigate to the project directory:
+
+`cd ExplorableAltText`
+
+3. Install dependencies using npm:
+
+`npm install`
+
+4. Start the development server:
+
+`npm run dev`
+
+5. Open your web browser and visit `http://localhost:3000` to view the application.
+
+## Usage
+
+Once the application is running, you can:
+
+- Explore tabular data using alternative text descriptions
+- Interact with the data to analyze and examine its contents
+- Customize settings and preferences for a personalized experience
+
+## Contributing
+
+Contributions are welcome! If you'd like to contribute to this project, please follow these guidelines:
+
+1. Fork the repository and create a new branch for your feature or bug fix.
+2. Make your changes and ensure that the code passes all tests.
+3. Submit a pull request detailing your changes and their purpose.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
