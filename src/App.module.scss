@@ -25,7 +25,6 @@ This consists of two main objects, the header and the content*/
   background-color: var(--bodyBackground);
   color: var(--bodyText);
   overflow-x: hidden;
-  overflow-y: hidden;
 
   &.light {
     @each $name, $value in $lightTheme {
