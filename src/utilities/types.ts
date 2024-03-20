@@ -9,6 +9,10 @@ export interface ReactTableProps<T extends object> {
   debugTable?: boolean;
 }
 
+export type CSVRow = {
+  [key: string]: string | undefined;
+};
+
 export type Person = {
   firstName: string;
   lastName: string;

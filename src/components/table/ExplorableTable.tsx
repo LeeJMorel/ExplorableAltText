@@ -1,10 +1,5 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-} from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
 
 import {
   ColumnDef,
@@ -14,9 +9,14 @@ import {
   useReactTable,
   flexRender,
 } from "@tanstack/react-table";
-import { Person, makeData } from "../../utilities";
 import EditableInputCell from "./EditableInputCell";
 import TableFilter from "./TableFilter";
+import JsonToCSV from "../fileUpload/JsonToCSV";
+
+interface IExplorableTableProps {
+  csvData: any[];
+  typeDefinition: string;
+}
 
 function useSkipper() {
   const shouldSkipRef = useRef(true);
@@ -34,67 +34,24 @@ function useSkipper() {
   return [shouldSkip, skip] as const;
 }
 
-function ExplorableTable() {
+function ExplorableTable({ csvData, typeDefinition }: IExplorableTableProps) {
+  const [data, setData] = csvData;
+  const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
   const rerender = useReducer(() => ({}), {})[1];
 
-  const columns = useMemo<ColumnDef<Person>[]>(
-    () => [
-      {
-        header: "Name",
-        footer: (props) => props.column.id,
-        columns: [
-          {
-            accessorKey: "firstName",
-            footer: (props) => props.column.id,
-          },
-          {
-            accessorFn: (row) => row.lastName,
-            id: "lastName",
-            header: () => <span>Last Name</span>,
-            footer: (props) => props.column.id,
-          },
-        ],
-      },
-      {
-        header: "Info",
-        footer: (props) => props.column.id,
-        columns: [
-          {
-            accessorKey: "age",
-            header: () => "Age",
-            footer: (props) => props.column.id,
-          },
-          {
-            header: "More Info",
-            columns: [
-              {
-                accessorKey: "visits",
-                header: () => <span>Visits</span>,
-                footer: (props) => props.column.id,
-              },
-              {
-                accessorKey: "status",
-                header: "Status",
-                footer: (props) => props.column.id,
-              },
-              {
-                accessorKey: "progress",
-                header: "Profile Progress",
-                footer: (props) => props.column.id,
-              },
-            ],
-          },
-        ],
-      },
-    ],
-    []
-  );
+  const columns = useMemo(() => {
+    if (!typeDefinition || !csvData || csvData.length === 0) return []; // Handle empty or missing type definition or CSV data
 
-  const [data, setData] = React.useState(() => makeData(1000));
-  const refreshData = () => setData(() => makeData(1000));
+    const columnKeys = Object.keys(csvData[0]);
+
+    return columnKeys.map((key) => ({
+      accessorKey: key,
+      header: () => key,
+    }));
+  }, [csvData, typeDefinition]);
 
   // Give our default column cell renderer editing superpowers!
-  const defaultColumn: Partial<ColumnDef<Person>> = {
+  const defaultColumn: Partial<ColumnDef<any>> = {
     cell: ({ getValue, row: { index }, column: { id } }) => {
       return (
         <EditableInputCell
@@ -106,8 +63,6 @@ function ExplorableTable() {
       );
     },
   };
-
-  const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
 
   const table = useReactTable({
     data,
@@ -122,8 +77,8 @@ function ExplorableTable() {
       updateData: (rowIndex: number, columnId: string, value: unknown) => {
         // Skip page index reset until after next rerender
         skipAutoResetPageIndex();
-        setData((old) =>
-          old.map((row, index) => {
+        setData((old: any[]) =>
+          old.map((row: any, index: number) => {
             if (index === rowIndex) {
               return {
                 ...old[rowIndex]!,
@@ -253,7 +208,7 @@ function ExplorableTable() {
         <button onClick={() => rerender()}>Force Rerender</button>
       </div>
       <div>
-        <button onClick={() => refreshData()}>Refresh Data</button>
+        <JsonToCSV jsonData={data} />
       </div>
     </div>
   );

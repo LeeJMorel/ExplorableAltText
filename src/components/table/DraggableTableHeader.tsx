@@ -1,40 +1,30 @@
-import { CSSProperties } from "react";
-
-import "./index.css";
-
 import { Header, flexRender } from "@tanstack/react-table";
-
-// needed for row & cell level scope DnD setup
 import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { Person } from "../../utilities/types";
+import styles from "./TableHeader.module.scss";
+import { Person } from "../../utilities";
 
-const DraggableTableHeader = ({
-  header,
-}: {
+interface TableHeaderProps {
   header: Header<Person, unknown>;
-}) => {
-  const { attributes, isDragging, listeners, setNodeRef, transform } =
-    useSortable({
-      id: header.column.id,
-    });
+}
 
-  const style: CSSProperties = {
-    opacity: isDragging ? 0.8 : 1,
-    position: "relative",
-    transform: CSS.Translate.toString(transform), // translate instead of transform to avoid squishing
-    transition: "width transform 0.2s ease-in-out",
-    whiteSpace: "nowrap",
-    width: header.column.getSize(),
-    zIndex: isDragging ? 1 : 0,
-  };
+const DraggableTableHeader: React.FC<TableHeaderProps> = ({ header }) => {
+  const { isDragging, setNodeRef, attributes, listeners } = useSortable({
+    id: header.column.id,
+  });
+
+  const headerClasses = [
+    styles.header,
+    isDragging && styles.dragging,
+    styles.transformed,
+    isDragging && styles.zIndex,
+  ].join(" ");
 
   return (
-    <th colSpan={header.colSpan} ref={setNodeRef} style={style}>
+    <th colSpan={header.colSpan} ref={setNodeRef} className={headerClasses}>
       {header.isPlaceholder
         ? null
         : flexRender(header.column.columnDef.header, header.getContext())}
-      <button {...attributes} {...listeners}>
+      <button {...attributes} {...listeners} className={styles.button}>
         🟰
       </button>
     </th>

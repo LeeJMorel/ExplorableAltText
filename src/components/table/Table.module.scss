@@ -1,0 +1,41 @@
+//Drag Along Cell
+.cell {
+  opacity: 1;
+  position: relative;
+  transition: width transform 0.2s ease-in-out;
+
+  &.dragging {
+    opacity: 0.8;
+    z-index: 1;
+  }
+}
+
+//Dragabble Table Header
+.header {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  font-weight: bold;
+  padding: 8px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.dragging {
+  opacity: 0.8;
+}
+
+.transformed {
+  position: relative;
+  transition: width transform 0.2s ease-in-out;
+}
+
+.zIndex {
+  z-index: 1;
+}
