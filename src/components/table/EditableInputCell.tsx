@@ -7,7 +7,7 @@ interface EditableCellProps {
   getValue: () => any;
   columnId: string;
   rowIndex: number;
-  setData: React.Dispatch<React.SetStateAction<Person[]>>; // Add setData prop
+  setData: React.Dispatch<React.SetStateAction<Person[]>>;
 }
 
 const EditableCell: React.FC<EditableCellProps> = ({

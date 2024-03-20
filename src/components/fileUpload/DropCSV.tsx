@@ -1,88 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, CSSProperties } from "react";
-
+import { useState } from "react";
 import {
   useCSVReader,
-  lightenDarkenColor,
   formatFileSize,
+  lightenDarkenColor,
 } from "react-papaparse";
+import classNames from "classnames";
+import styles from "./FileUpload.module.scss";
+import { generateCSVType } from "../../utilities";
 
-const GREY = "#CCC";
-const GREY_LIGHT = "rgba(255, 255, 255, 0.4)";
+interface IDropCSVProps {
+  onCSVUpload: (data: any[], type: string) => void;
+}
+
 const DEFAULT_REMOVE_HOVER_COLOR = "#A01919";
 const REMOVE_HOVER_COLOR_LIGHT = lightenDarkenColor(
   DEFAULT_REMOVE_HOVER_COLOR,
   40
 );
-const GREY_DIM = "#686868";
 
-const styles = {
-  zone: {
-    alignItems: "center",
-    borderWidth: 2,
-    borderStyle: "dashed",
-    borderColor: GREY,
-    borderRadius: 20,
-    display: "flex",
-    flexDirection: "column",
-    height: "100%",
-    justifyContent: "center",
-    padding: 20,
-  } as CSSProperties,
-  file: {
-    background: "linear-gradient(to bottom, #EEE, #DDD)",
-    borderRadius: 20,
-    display: "flex",
-    height: 120,
-    width: 120,
-    position: "relative",
-    zIndex: 10,
-    flexDirection: "column",
-    justifyContent: "center",
-  } as CSSProperties,
-  info: {
-    alignItems: "center",
-    display: "flex",
-    flexDirection: "column",
-    paddingLeft: 10,
-    paddingRight: 10,
-  } as CSSProperties,
-  size: {
-    backgroundColor: GREY_LIGHT,
-    borderRadius: 3,
-    marginBottom: "0.5em",
-    justifyContent: "center",
-    display: "flex",
-  } as CSSProperties,
-  name: {
-    backgroundColor: GREY_LIGHT,
-    borderRadius: 3,
-    fontSize: 12,
-    marginBottom: "0.5em",
-  } as CSSProperties,
-  progressBar: {
-    bottom: 14,
-    position: "absolute",
-    width: "100%",
-    paddingLeft: 10,
-    paddingRight: 10,
-  } as CSSProperties,
-  zoneHover: {
-    borderColor: GREY_DIM,
-  } as CSSProperties,
-  default: {
-    borderColor: GREY,
-  } as CSSProperties,
-  remove: {
-    height: 23,
-    position: "absolute",
-    right: 6,
-    top: 6,
-    width: 23,
-  } as CSSProperties,
-};
-
-export default function CSVReader() {
+function DropCSV({ onCSVUpload }: IDropCSVProps) {
   const { CSVReader } = useCSVReader();
   const [zoneHover, setZoneHover] = useState(false);
   const [removeHoverColor, setRemoveHoverColor] = useState(
@@ -96,6 +33,8 @@ export default function CSVReader() {
         console.log(results);
         console.log("---------------------------");
         setZoneHover(false);
+        const csvType = generateCSVType(results.data); // Generate CSV type
+        onCSVUpload(results.data, csvType); // Pass CSV data and type to the parent component
       }}
       onDragOver={(event: DragEvent) => {
         event.preventDefault();
@@ -116,27 +55,25 @@ export default function CSVReader() {
         <>
           <div
             {...getRootProps()}
-            style={Object.assign(
-              {},
-              styles.zone,
-              zoneHover && styles.zoneHover
-            )}
+            className={classNames(styles.zone, {
+              [styles.zoneHover]: zoneHover,
+            })}
           >
             {acceptedFile ? (
               <>
-                <div style={styles.file}>
-                  <div style={styles.info}>
-                    <span style={styles.size}>
+                <div className={styles.file}>
+                  <div className={styles.info}>
+                    <span className={styles.size}>
                       {formatFileSize(acceptedFile.size)}
                     </span>
-                    <span style={styles.name}>{acceptedFile.name}</span>
+                    <span className={styles.name}>{acceptedFile.name}</span>
                   </div>
-                  <div style={styles.progressBar}>
+                  <div className={styles.progressBar}>
                     <ProgressBar />
                   </div>
                   <div
                     {...getRemoveFileProps()}
-                    style={styles.remove}
+                    className={styles.remove}
                     onMouseOver={(event: Event) => {
                       event.preventDefault();
                       setRemoveHoverColor(REMOVE_HOVER_COLOR_LIGHT);
@@ -159,3 +96,5 @@ export default function CSVReader() {
     </CSVReader>
   );
 }
+
+export default DropCSV;
