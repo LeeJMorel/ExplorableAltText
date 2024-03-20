@@ -1,6 +1,7 @@
 .navContainer {
   display: flex;
-  gap: 10px;
+  gap: 16px;
+  background-color: var(--accentBackground);
 
   .navLink {
     text-decoration: none;
@@ -9,6 +10,8 @@
       background-color: var(--accentBackground);
       color: var(--accentText);
       outline: none;
+      border: none;
+      padding: 1em;
 
       &:hover {
         background-color: var(--secondaryBackground);
