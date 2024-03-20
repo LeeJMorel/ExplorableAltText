@@ -18,3 +18,9 @@ export type Person = {
   status: "relationship" | "complicated" | "single";
   subRows?: Person[];
 };
+
+export interface Project {
+  id: number;
+  title: string;
+  description: string;
+}

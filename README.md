@@ -46,6 +46,7 @@ Contributions are welcome! If you'd like to contribute to this project, please f
 1. Fork the repository and create a new branch for your feature or bug fix.
 2. Make your changes and ensure that the code passes all tests.
 3. Submit a pull request detailing your changes and their purpose.
+4. MUST BE DESIGNED FOR ACCESS, we use ariakit: https://ariakit.org/components
 
 ## License
 

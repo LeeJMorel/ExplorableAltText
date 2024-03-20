@@ -1,0 +1,23 @@
+.navContainer {
+  display: flex;
+  gap: 10px;
+
+  .navLink {
+    text-decoration: none;
+
+    .navButton {
+      background-color: var(--accentBackground);
+      color: var(--accentText);
+      outline: none;
+
+      &:hover {
+        background-color: var(--secondaryBackground);
+        color: var(--secondaryText);
+      }
+
+      &[aria-expanded="true"] {
+        background-color: hsl(204 20% 96%);
+      }
+    }
+  }
+}
