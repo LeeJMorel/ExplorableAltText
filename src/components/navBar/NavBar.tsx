@@ -1,18 +1,19 @@
 import { NavLink } from "react-router-dom";
 import { Button } from "@ariakit/react";
+import styles from "./NavBar.module.scss";
 
 const NavBar = () => {
   return (
     <header>
-      <nav className="navContainer">
-        <NavLink to="/" className="navLink">
-          <Button className="navButton">Home</Button>
+      <nav className={styles.navContainer}>
+        <NavLink to="/" className={styles.navLink}>
+          <Button className={styles.navButton}>Home</Button>
         </NavLink>
-        <NavLink to="/team" className="navLink">
-          <Button className="navButton">Team</Button>
+        <NavLink to="/team" className={styles.navLink}>
+          <Button className={styles.navButton}>Team</Button>
         </NavLink>
-        <NavLink to="/projects" className="navLink">
-          <Button className="navButton">Projects</Button>
+        <NavLink to="/projects" className={styles.navLink}>
+          <Button className={styles.navButton}>Projects</Button>
         </NavLink>
       </nav>
     </header>
