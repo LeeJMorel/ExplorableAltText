@@ -1,0 +1,12 @@
+.projectsDetail{
+    overflow-y: auto;
+}
+
+.projectsMain{
+    display: flex;
+    float: left;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+    overflow-y: scroll;
+}

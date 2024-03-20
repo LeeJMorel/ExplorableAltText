@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Project } from "../utilities";
 import Card from "../components/cards/Card";
 import { Link } from "react-router-dom";
+import styles from "./Pages.module.scss";
 
 function ProjectsMain() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -22,7 +23,7 @@ function ProjectsMain() {
   }, []);
 
   return (
-    <div>
+    <div className={styles.projectsMain}>
       {projects.map((project) => (
         <Card
           key={project.id}
