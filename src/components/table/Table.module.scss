@@ -1,23 +1,59 @@
+// Table styles
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  margin-top: 2em;
+  padding: 0;
+  font-size: 1.25em;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--accentText);
+  font-family: inherit;
+  text-align: left;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease-in-out;
+
+  thead {
+    tr {
+      background-color: var(--accentBackground);
+      color: var(--accentText);
+      font-weight: 500;
+      text-align: center;
+      border: none;
+    }
+  }
+}
+
+//Dragabble Table Header
+.header {
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
+  .cell {
+    border-radius: 12px 12px 0px 0px;
+    &.dragging {
+      opacity: 0.8;
+      z-index: 1;
+    }
+  }
+}
+
 //Drag Along Cell
 .cell {
   opacity: 1;
   position: relative;
   transition: width transform 0.2s ease-in-out;
 
+  input {
+    border: 1px solid var(--accentBackground);
+    width: 100%;
+    width: fit-content;
+    margin: none;
+  }
+
   &.dragging {
     opacity: 0.8;
     z-index: 1;
   }
-}
-
-//Dragabble Table Header
-.header {
-  background-color: #f0f0f0;
-  border: 1px solid #ddd;
-  font-weight: bold;
-  padding: 8px;
-  text-align: left;
-  white-space: nowrap;
 }
 
 .button {
