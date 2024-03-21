@@ -33,6 +33,16 @@
     --border: rgba(0, 0, 0, 0.1);
     --highlight: rgba(255, 255, 255, 0.2);
     --shadow: rgba(0, 0, 0, 0.1);
+    padding: 12px;
+    text-align: center;
+    width: 100%;
+    font-size: 1.25em;
+    border: 1px solid var(--border);
+
+    .button a {
+      text-decoration: none!important;
+      color: var(--accentText)!important;
+    }
 
     &:hover {
       background-color: var(--secondaryBackground);
