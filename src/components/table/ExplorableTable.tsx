@@ -142,35 +142,21 @@ function ExplorableTable({ csvData, typeDefinition }: IExplorableTableProps) {
           })}
         </tbody>
       </table>
-      <div className="h-2" />
-      <div className="flex items-center gap-2">
+      <div className={styles.tableNav}>
+      <div className={styles.buttonDiv}>
         <button
-          className="border rounded p-1"
+          className={styles.button}
           onClick={() => table.setPageIndex(0)}
           disabled={!table.getCanPreviousPage()}
         >
           {"<<"}
         </button>
         <button
-          className="border rounded p-1"
+          className={styles.button}
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
           {"<"}
-        </button>
-        <button
-          className="border rounded p-1"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          {">"}
-        </button>
-        <button
-          className="border rounded p-1"
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          disabled={!table.getCanNextPage()}
-        >
-          {">>"}
         </button>
         <span className="flex items-center gap-1">
           <div>Page</div>
@@ -179,8 +165,25 @@ function ExplorableTable({ csvData, typeDefinition }: IExplorableTableProps) {
             {table.getPageCount()}
           </strong>
         </span>
+        <button
+          className={styles.button}
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          {">"}
+        </button>
+        <button
+          className={styles.button}
+          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+          disabled={!table.getCanNextPage()}
+        >
+          {">>"}
+        </button>
+        </div>
+        <div className={styles.buttonDiv}>
+        <div className={styles.tableInfo}>{table.getRowModel().rows.length} Rows</div>
         <span className="flex items-center gap-1">
-          | Go to page:
+          Go to page:
           <input
             type="number"
             defaultValue={table.getState().pagination.pageIndex + 1}
@@ -204,12 +207,14 @@ function ExplorableTable({ csvData, typeDefinition }: IExplorableTableProps) {
           ))}
         </select>
       </div>
-      <div>{table.getRowModel().rows.length} Rows</div>
-      <div>
-        <button onClick={() => rerender()}>Force Rerender</button>
+      <div className={styles.csvButtonsDiv}>
+        <div>
+          <button onClick={() => rerender()}>Force Rerender</button>
+        </div>
+        <div>
+          <JsonToCSV jsonData={data} />
+        </div>
       </div>
-      <div>
-        <JsonToCSV jsonData={data} />
       </div>
     </div>
   );
