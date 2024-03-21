@@ -12,6 +12,7 @@ import {
 import EditableInputCell from "./EditableInputCell";
 import TableFilter from "./TableFilter";
 import JsonToCSV from "../fileUpload/JsonToCSV";
+import styles from "./Table.module.scss";
 
 interface IExplorableTableProps {
   csvData: any[];
@@ -96,13 +97,13 @@ function ExplorableTable({ csvData, typeDefinition }: IExplorableTableProps) {
   return (
     <div className="p-2">
       <div className="h-2" />
-      <table>
-        <thead>
+      <table className={styles.table}>
+        <thead className={styles.header}>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <th key={header.id} colSpan={header.colSpan}>
+                  <th className={styles.cell} key={header.id} colSpan={header.colSpan}>
                     {header.isPlaceholder ? null : (
                       <div>
                         {flexRender(
@@ -128,7 +129,7 @@ function ExplorableTable({ csvData, typeDefinition }: IExplorableTableProps) {
               <tr key={row.id}>
                 {row.getVisibleCells().map((cell) => {
                   return (
-                    <td key={cell.id}>
+                    <td className={styles.cell} key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
