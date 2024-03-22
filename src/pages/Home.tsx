@@ -1,8 +1,13 @@
+import { Outlet } from "react-router-dom";
+import styles from "./Pages.module.scss";
+
 function Home() {
   return (
-    <div>
-      <h1>Home Page</h1>
-      <p>Welcome to the Home Page</p>
+    <div className={styles.page}>
+      <h1>Home</h1>
+      <p>Explorable Alt Text</p>
+      {/* Outlet to render child routes */}
+      <Outlet />
     </div>
   );
 }

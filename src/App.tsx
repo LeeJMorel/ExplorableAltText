@@ -9,6 +9,8 @@ import Projects from "./pages/Projects";
 import Footer from "./components/footer/Footer";
 import ProjectsMain from "./pages/ProjectsMain";
 import ProjectsDetail from "./pages/ProjectsDetail";
+import HomeMain from "./pages/HomeMain";
+import HomeDetail from "./pages/HomeDetail";
 
 function determineTheme() {
   const storedTheme = localStorage.getItem("theme");
@@ -23,13 +25,17 @@ function App() {
       <NavBar />
       <main>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/team" element={<Team />} />
+          <Route path="/" element={<Home />}>
+            {/* Nested routes for home */}
+            <Route index element={<HomeMain />} />
+            <Route path=":faqId" element={<HomeDetail />} />
+          </Route>
+          {/* Nested routes for projects */}
           <Route path="/projects/*" element={<Projects />}>
-            {/* Nested routes for projects */}
             <Route index element={<ProjectsMain />} />
             <Route path=":projectId" element={<ProjectsDetail />} />
           </Route>
+          <Route path="/team" element={<Team />} />
         </Routes>
       </main>
       <Footer />
