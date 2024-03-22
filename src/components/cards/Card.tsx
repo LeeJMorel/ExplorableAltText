@@ -10,6 +10,7 @@ export interface ICardProps extends React.HTMLAttributes<HTMLDivElement> {
   buttons?: React.ReactNode[];
   title?: string;
   onButtonClick?: (index: number) => void;
+  onCardClick?: () => void;
 }
 
 const Card: React.FC<ICardProps> = ({
@@ -19,6 +20,7 @@ const Card: React.FC<ICardProps> = ({
   buttons,
   title,
   onButtonClick,
+  onCardClick,
   children,
 }) => {
   const renderImage = () => {
@@ -60,6 +62,7 @@ const Card: React.FC<ICardProps> = ({
         [styles.row]: variant === "row",
         [styles.column]: variant === "column",
       })}
+      onClick={onCardClick}
     >
       {renderImage()}
       <div className={styles.content}>

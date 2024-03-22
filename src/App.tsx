@@ -28,7 +28,7 @@ function App() {
           <Route path="/" element={<Home />}>
             {/* Nested routes for home */}
             <Route index element={<HomeMain />} />
-            <Route path=":faqId" element={<HomeDetail />} />
+            <Route path="details/:faqId" element={<HomeDetail />} />
           </Route>
           {/* Nested routes for projects */}
           <Route path="/projects/*" element={<Projects />}>

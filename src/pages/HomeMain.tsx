@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { ICard } from "../utilities";
 import Card from "../components/cards/Card";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./Pages.module.scss";
 
 function HomeMain() {
+  const navigate = useNavigate();
   const [faq, setFAQ] = useState<ICard[]>([]);
 
   useEffect(() => {
@@ -38,16 +39,15 @@ function HomeMain() {
   return (
     <div className={styles.main}>
       {faq.map((faq) => (
-        <Link key={faq.id} to={`/details/${faq.id}`}>
-          <Card
-            key={faq.id}
-            imageUrl="/placeholderimage.jpg"
-            imageAltText="Card Image"
-            title={faq.title}
-          >
-            <p>{faq.description}</p>
-          </Card>
-        </Link>
+        <Card
+          key={faq.id}
+          imageUrl="/placeholderimage.jpg"
+          imageAltText="Card Image"
+          title={faq.title}
+          onCardClick={() => navigate(`/details/${faq.id}`)}
+        >
+          <p>{faq.description}</p>
+        </Card>
       ))}
     </div>
   );
