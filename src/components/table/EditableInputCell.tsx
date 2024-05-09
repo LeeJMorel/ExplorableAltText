@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { useEditableCell } from "../../hooks";
-import { Person } from "../../utilities";
 
 interface EditableCellProps {
   getValue: () => any;
   columnId: string;
   rowIndex: number;
-  setData: React.Dispatch<React.SetStateAction<Person[]>>;
+  setData: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 const EditableCell: React.FC<EditableCellProps> = ({

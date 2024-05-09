@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 
 import {
   ColumnDef,
@@ -36,18 +43,19 @@ function useSkipper() {
 }
 
 function ExplorableTable({ csvData, typeDefinition }: IExplorableTableProps) {
-  const [data, setData] = csvData;
+  const [data, setData] = useState<any[]>([]);
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
   const rerender = useReducer(() => ({}), {})[1];
+  console.log("Data:", data);
 
   const columns = useMemo(() => {
     if (!typeDefinition || !csvData || csvData.length === 0) return []; // Handle empty or missing type definition or CSV data
 
-    const columnKeys = Object.keys(csvData[0]);
+    const columnKeys = csvData[0];
 
-    return columnKeys.map((key) => ({
-      accessorKey: key,
-      header: () => key,
+    return columnKeys.map((header: string) => ({
+      accessorKey: header,
+      header: () => header,
     }));
   }, [csvData, typeDefinition]);
 
@@ -64,6 +72,27 @@ function ExplorableTable({ csvData, typeDefinition }: IExplorableTableProps) {
       );
     },
   };
+
+  useEffect(() => {
+    if (csvData && csvData.length > 1) {
+      // Exclude the header row
+      const headerRow = csvData[0];
+      const rows = csvData.slice(1);
+
+      // Transform each row into an object with column headers as keys
+      const transformedData = rows.map((row) => {
+        const rowData: any = {};
+        headerRow.forEach((header: string | number, index: string | number) => {
+          rowData[header] = row[index];
+        });
+        return rowData;
+      });
+
+      setData(transformedData); // Set the transformed data as the state
+    } else {
+      setData([]); // If no data or only header row, set data state to empty array
+    }
+  }, [csvData]);
 
   const table = useReactTable({
     data,
@@ -103,7 +132,11 @@ function ExplorableTable({ csvData, typeDefinition }: IExplorableTableProps) {
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <th className={styles.cell} key={header.id} colSpan={header.colSpan}>
+                  <th
+                    className={styles.cell}
+                    key={header.id}
+                    colSpan={header.colSpan}
+                  >
                     {header.isPlaceholder ? null : (
                       <div>
                         {flexRender(
@@ -143,78 +176,80 @@ function ExplorableTable({ csvData, typeDefinition }: IExplorableTableProps) {
         </tbody>
       </table>
       <div className={styles.tableNav}>
-      <div className={styles.buttonDiv}>
-        <button
-          className={styles.button}
-          onClick={() => table.setPageIndex(0)}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {"<<"}
-        </button>
-        <button
-          className={styles.button}
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {"<"}
-        </button>
-        <span className="flex items-center gap-1">
-          <div>Page</div>
-          <strong>
-            {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount()}
-          </strong>
-        </span>
-        <button
-          className={styles.button}
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          {">"}
-        </button>
-        <button
-          className={styles.button}
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          disabled={!table.getCanNextPage()}
-        >
-          {">>"}
-        </button>
+        <div className={styles.buttonDiv}>
+          <button
+            className={styles.button}
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+          >
+            {"<<"}
+          </button>
+          <button
+            className={styles.button}
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            {"<"}
+          </button>
+          <span className="flex items-center gap-1">
+            <div>Page</div>
+            <strong>
+              {table.getState().pagination.pageIndex + 1} of{" "}
+              {table.getPageCount()}
+            </strong>
+          </span>
+          <button
+            className={styles.button}
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            {">"}
+          </button>
+          <button
+            className={styles.button}
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage()}
+          >
+            {">>"}
+          </button>
         </div>
         <div className={styles.buttonDiv}>
-        <div className={styles.tableInfo}>{table.getRowModel().rows.length} Rows</div>
-        <span className="flex items-center gap-1">
-          Go to page:
-          <input
-            type="number"
-            defaultValue={table.getState().pagination.pageIndex + 1}
+          <div className={styles.tableInfo}>
+            {table.getRowModel().rows.length} Rows
+          </div>
+          <span className="flex items-center gap-1">
+            Go to page:
+            <input
+              type="number"
+              defaultValue={table.getState().pagination.pageIndex + 1}
+              onChange={(e) => {
+                const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                table.setPageIndex(page);
+              }}
+              className="border p-1 rounded w-16"
+            />
+          </span>
+          <select
+            value={table.getState().pagination.pageSize}
             onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              table.setPageIndex(page);
+              table.setPageSize(Number(e.target.value));
             }}
-            className="border p-1 rounded w-16"
-          />
-        </span>
-        <select
-          value={table.getState().pagination.pageSize}
-          onChange={(e) => {
-            table.setPageSize(Number(e.target.value));
-          }}
-        >
-          {[10, 20, 30, 40, 50].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className={styles.csvButtonsDiv}>
-        <div>
-          <button onClick={() => rerender()}>Force Rerender</button>
+          >
+            {[10, 20, 30, 40, 50].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                Show {pageSize}
+              </option>
+            ))}
+          </select>
         </div>
-        <div>
-          <JsonToCSV jsonData={data} />
+        <div className={styles.csvButtonsDiv}>
+          <div>
+            <button onClick={() => rerender()}>Force Rerender</button>
+          </div>
+          <div>
+            <JsonToCSV jsonData={data} />
+          </div>
         </div>
-      </div>
       </div>
     </div>
   );

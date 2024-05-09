@@ -1,15 +1,25 @@
 import { CSVRow } from "./types";
 
 export function generateCSVType(csvData: CSVRow[]): string {
-  const allKeys = csvData.reduce((keys, row) => {
-    return [...keys, ...Object.keys(row)];
-  }, [] as string[]);
+  if (csvData.length === 0) {
+    return "type CSVDataRow = {}";
+  }
 
-  const uniqueKeys = Array.from(new Set(allKeys));
+  const rowTypeDefinition = csvData.reduce((typeDefinition, row, rowIndex) => {
+    // Generate type properties for the row
+    const rowTypeProperties = Object.keys(row).map((key) => {
+      const value = row[key];
+      const type = typeof value;
+      return `${key}: ${type}`;
+    });
 
-  const typeProperties = uniqueKeys.map((key) => `${key}: string | undefined;`);
+    // Combine type properties into a type definition for the row
+    const rowTypeDef = `type CSVDataRow${
+      rowIndex + 1
+    } = { ${rowTypeProperties.join("; ")} }`;
 
-  return `type CSVDataType = {
-      ${typeProperties.join("\n      ")}
-    }`;
+    return `${typeDefinition}\n${rowTypeDef}`;
+  }, "");
+
+  return rowTypeDefinition;
 }
