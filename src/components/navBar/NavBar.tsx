@@ -9,11 +9,11 @@ const NavBar = () => {
         <NavLink to="/" className={styles.navLink}>
           <Button className={styles.navButton}>Home</Button>
         </NavLink>
-        <NavLink to="/team" className={styles.navLink}>
-          <Button className={styles.navButton}>Team</Button>
-        </NavLink>
         <NavLink to="/projects" className={styles.navLink}>
           <Button className={styles.navButton}>Projects</Button>
+        </NavLink>
+        <NavLink to="/test" className={styles.navLink}>
+          <Button className={styles.navButton}>Test</Button>
         </NavLink>
       </nav>
     </header>

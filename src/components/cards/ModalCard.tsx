@@ -1,31 +1,31 @@
-import { Dialog, DialogDismiss, DialogHeading } from "@ariakit/react";
-import React from "react";
+import * as Ariakit from "@ariakit/react";
+import Button from "../buttons/button";
 
-export interface IModalCardProps {
-  open: boolean;
-  onClose: () => void;
-  title?: string;
-  content?: React.ReactNode;
-  actions?: React.ReactNode;
-}
-
-const ModalCard: React.FC<IModalCardProps> = ({
-  open,
-  onClose,
-  title,
-  content,
-  actions,
-}) => {
+function ModalCard() {
+  const dialog = Ariakit.useDialogStore();
   return (
-    <Dialog open={open} onClose={onClose} className="modal-card">
-      {title && <DialogHeading>{title}</DialogHeading>}
-      {content && <div className="modal-content">{content}</div>}
-      {actions && <div className="modal-actions">{actions}</div>}
-      <DialogDismiss className="modal-close" onClick={onClose}>
-        Close
-      </DialogDismiss>
-    </Dialog>
+    <div className="modalCard">
+      <Button onClick={dialog.show} className="button">
+        Show modal
+      </Button>
+      <Ariakit.Dialog
+        store={dialog}
+        backdrop={<div className="backdrop" />}
+        className="dialog"
+      >
+        <Ariakit.DialogHeading className="heading">
+          Success
+        </Ariakit.DialogHeading>
+        <p className="description">
+          Your payment has been successfully processed. We have emailed your
+          receipt.
+        </p>
+        <div>
+          <Ariakit.DialogDismiss className="button">OK</Ariakit.DialogDismiss>
+        </div>
+      </Ariakit.Dialog>
+    </div>
   );
-};
+}
 
 export default ModalCard;

@@ -23,7 +23,7 @@ function ProjectsMain() {
   }, []);
 
   return (
-    <div className={styles.main}>
+    <div className={styles.cardRow}>
       {projects.map((project) => (
         <Card
           key={project.id}

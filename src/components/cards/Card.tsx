@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import styles from "./Cards.module.scss";
-import { Button } from "@ariakit/react";
+import Button from "../buttons/button";
 
 export interface ICardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: "row" | "column";
@@ -22,6 +22,7 @@ const Card: React.FC<ICardProps> = ({
   onButtonClick,
   onCardClick,
   children,
+  className,
 }) => {
   const renderImage = () => {
     if (!imageUrl) return null;
@@ -58,7 +59,7 @@ const Card: React.FC<ICardProps> = ({
 
   return (
     <div
-      className={classNames(styles.card, {
+      className={classNames(styles.card, className, {
         [styles.row]: variant === "row",
         [styles.column]: variant === "column",
       })}

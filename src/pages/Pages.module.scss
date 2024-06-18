@@ -2,11 +2,22 @@
   overflow-y: auto;
 }
 
-.main {
+.page {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-around;
   padding: 20px;
   overflow-y: scroll;
+
+  .cardRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    .card {
+      flex: 1 1 calc(33.333% - 3rem); // Adjust the basis for three cards in a row
+      max-width: calc(33.333% - 3rem);
+    }
+  }
 }

@@ -3,11 +3,10 @@ import { generateCSVType } from "../utilities";
 import { useState } from "react";
 import DropCSV from "../components/fileUpload/DropCSV";
 import ExplorableTable from "../components/table/ExplorableTable";
-import { useParams } from "react-router-dom";
 import styles from "./Pages.module.scss";
+import ModalCard from "../components/cards/ModalCard";
 
 function Team() {
-  const { projectId } = useParams();
   const [csvData, setCSVData] = useState<any[]>([]);
   const [typeDefinition, setTypeDefinition] = useState<string>("");
 
@@ -23,8 +22,9 @@ function Team() {
 
   // Logic for rendering individual project details goes here
   return (
-    <div className={styles.projectsDetail}>
-      <h2>Project Detail for ID: {projectId}</h2>
+    <div className={styles.page}>
+      <h2>Welcome to Explorable Alt Text!</h2>
+      <ModalCard />
       <DropCSV onCSVUpload={handleCSVUpload} />
       {csvData.length > 0 && (
         <ExplorableTable csvData={csvData} typeDefinition={typeDefinition} />

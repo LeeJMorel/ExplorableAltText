@@ -37,13 +37,14 @@ function HomeMain() {
   }, []);
 
   return (
-    <div className={styles.main}>
+    <div className={styles.cardRow}>
       {faq.map((faq) => (
         <Card
           key={faq.id}
           imageUrl="/placeholderimage.jpg"
           imageAltText="Card Image"
           title={faq.title}
+          className={styles.card}
           onCardClick={() => navigate(`/details/${faq.id}`)}
         >
           <p>{faq.description}</p>
