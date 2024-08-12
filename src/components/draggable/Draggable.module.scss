@@ -1,0 +1,49 @@
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.draggableBar {
+  position: absolute;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: move;
+  display: flex;
+  flex-direction: row; /* Stack elements vertically */
+  align-items: flex-start; /* Aligns items to the start */
+  width: 100%; /* Ensures the draggable bar takes up the full width */
+}
+
+.handle {
+  display: flex;
+  align-items: center;
+}
+
+.hamburgerIcon {
+  margin-right: 8px; /* Space between icon and title */
+  cursor: grab;
+}
+
+.titleContainer {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.disclosure-button {
+  background-color: #ddd;
+  padding: 5px;
+  cursor: pointer;
+  border-bottom: 1px solid #ccc;
+  width: 100%; /* Ensures the disclosure button takes up the full width */
+}
+
+.disclosure-content {
+  margin-top: 5px;
+  padding: 5px 0;
+  border-top: 1px solid #ccc;
+  width: 100%; /* Ensures the content takes up the full width */
+}

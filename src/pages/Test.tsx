@@ -5,18 +5,33 @@ import { useDropzone } from "react-dropzone";
 import DropCSV from "../components/fileUpload/DropCSV";
 import ExplorableTable from "../components/table/ExplorableTable";
 import styles from "./Pages.module.scss";
+import DraggableComponent from "../components/draggable/DraggableComponent";
+
 // import ModalCard from "../components/cards/ModalCard";
 // import Button from "../components/buttons/button";
 
-function Test() {
+function Test(this: any) {
+  const data = [
+    { title: "Foo", content: <div>Stuff 1</div> },
+    { title: "Bar", content: <div>Stuff 2</div> },
+    { title: "Baz", content: <div>Stuff 3</div> },
+  ];
+
   const [csvData, setCSVData] = useState<any[]>([]);
   const [typeDefinition, setTypeDefinition] = useState<string>("");
   const [projectTitle, setProjectTitle] = useState<string>("");
+  const [dataTitle, setDataTitle] = useState<string>("");
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [imageAltText, setImageAltText] = useState<string>("");
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProjectTitle(event.target.value);
+  };
+
+  const handleDataTitleChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setDataTitle(event.target.value);
   };
 
   const handleCSVUpload = (data: any[]) => {
@@ -67,7 +82,22 @@ function Test() {
           aria-labelledby="projectTitleLabel"
           placeholder="Enter your project title here"
         />
-        <DropCSV onCSVUpload={handleCSVUpload} />
+        <div className={styles.csvContainer}>
+          {csvData.length > 0 && (
+            <input
+              id="dataTitle"
+              type="text"
+              value={dataTitle}
+              onChange={handleDataTitleChange}
+              className={styles.dataInput}
+              aria-labelledby="projectTitleLabel"
+              placeholder="Enter your data title here"
+            />
+          )}
+          <div className={styles.dropCSV}>
+            <DropCSV onCSVUpload={handleCSVUpload} />
+          </div>
+        </div>
         {csvData.length > 0 && (
           <ExplorableTable csvData={csvData} typeDefinition={typeDefinition} />
         )}
@@ -90,6 +120,10 @@ function Test() {
       </div>
       <div className={styles.rightSide}>
         <h1 className={styles.renderedTitle}>{projectTitle}</h1>
+        <h1 className={styles.renderedTitle}>{dataTitle}</h1>
+        <div className={styles.draggableContainer}>
+          <DraggableComponent data={data} />
+        </div>
         {uploadedImage && (
           <img
             src={uploadedImage}
