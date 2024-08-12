@@ -1,29 +1,53 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { generateCSVType } from "../utilities";
-// import { useState } from "react";
-// import DropCSV from "../components/fileUpload/DropCSV";
-// import ExplorableTable from "../components/table/ExplorableTable";
+import { generateCSVType } from "../utilities";
+import { useState } from "react";
+import { useDropzone } from "react-dropzone";
+import DropCSV from "../components/fileUpload/DropCSV";
+import ExplorableTable from "../components/table/ExplorableTable";
 import styles from "./Pages.module.scss";
 // import ModalCard from "../components/cards/ModalCard";
 // import Button from "../components/buttons/button";
 
 function Test() {
-  // const [csvData, setCSVData] = useState<any[]>([]);
-  // const [typeDefinition, setTypeDefinition] = useState<string>("");
+  const [csvData, setCSVData] = useState<any[]>([]);
+  const [typeDefinition, setTypeDefinition] = useState<string>("");
+  const [projectTitle, setProjectTitle] = useState<string>("");
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [imageAltText, setImageAltText] = useState<string>("");
 
-  // const handleCSVUpload = (data: any[]) => {
-  //   // Handle the parsed CSV data here
-  //   setCSVData(data);
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setProjectTitle(event.target.value);
+  };
 
-  //   // Generate the type definition dynamically
-  //   const dynamicTypeDefinition = generateCSVType(data);
-  //   setTypeDefinition(dynamicTypeDefinition);
-  //   console.log("Type Definition:", dynamicTypeDefinition);
-  // };
+  const handleCSVUpload = (data: any[]) => {
+    // Handle the parsed CSV data here
+    setCSVData(data);
 
-  // Logic for rendering individual project details goes here
+    // Generate the type definition dynamically
+    const dynamicTypeDefinition = generateCSVType(data);
+    setTypeDefinition(dynamicTypeDefinition);
+    console.log("Type Definition:", dynamicTypeDefinition);
+  };
+
+  const onDrop = (acceptedFiles: any) => {
+    const file = acceptedFiles[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      setUploadedImage(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+  });
+
+  const handleAltTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setImageAltText(event.target.value);
+  };
+
   return (
-    <div className={styles.page}>
+    <div className={styles.projectPage}>
       {/* <ModalCard
         title="Success"
         description="Your payment has been successfully processed. We have emailed your receipt."
@@ -31,12 +55,49 @@ function Test() {
           <Button key="ok">OK</Button>,
           <Button key="cancel">Cancel</Button>,
         ]}
-      /> */}
-      {/* 
-      <DropCSV onCSVUpload={handleCSVUpload} />
-      {csvData.length > 0 && (
-        <ExplorableTable csvData={csvData} typeDefinition={typeDefinition} />
-      )} */}
+      />  */}
+
+      <div className={styles.leftSide}>
+        <input
+          id="projectTitle"
+          type="text"
+          value={projectTitle}
+          onChange={handleTitleChange}
+          className={styles.titleInput}
+          aria-labelledby="projectTitleLabel"
+          placeholder="Enter your project title here"
+        />
+        <DropCSV onCSVUpload={handleCSVUpload} />
+        {csvData.length > 0 && (
+          <ExplorableTable csvData={csvData} typeDefinition={typeDefinition} />
+        )}
+
+        <div {...getRootProps()} className={styles.dropzone}>
+          <input {...getInputProps()} />
+          <p>
+            (Optional) Drag & drop an image of the data graphic here, or click
+            to select one
+          </p>
+        </div>
+        <input
+          id="imageAltText"
+          type="text"
+          value={imageAltText}
+          onChange={handleAltTextChange}
+          className={styles.altTextInput}
+          placeholder="Enter alt text for the image"
+        />
+      </div>
+      <div className={styles.rightSide}>
+        <h1 className={styles.renderedTitle}>{projectTitle}</h1>
+        {uploadedImage && (
+          <img
+            src={uploadedImage}
+            alt={imageAltText || "Uploaded Project"}
+            className={styles.uploadedImage}
+          />
+        )}
+      </div>
     </div>
   );
 }
