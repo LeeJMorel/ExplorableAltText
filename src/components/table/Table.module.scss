@@ -33,11 +33,13 @@
   }
 }
 
-//Dragabble Table Header
+// Header with shadow and drag styles
 .header {
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+
   .cell {
-    border-radius: 12px 12px 0px 0px;
+    border-radius: 12px 12px 0 0;
+
     &.dragging {
       opacity: 0.8;
       z-index: 1;
@@ -45,17 +47,17 @@
   }
 }
 
-//Drag Along Cell
+// Cell styles for drag and drop
 .cell {
   opacity: 1;
   position: relative;
-  transition: width transform 0.2s ease-in-out;
+  transition: width 0.2s ease-in-out, transform 0.2s ease-in-out;
 
   input {
     border: 1px solid var(--accentBackground);
     width: 100%;
     width: fit-content;
-    margin: none;
+    margin: 0;
     font-size: 0.9em;
   }
 
@@ -65,6 +67,7 @@
   }
 }
 
+// CSV Buttons styles
 .csvButtonsDiv {
   display: flex;
   justify-content: space-around;
@@ -79,19 +82,20 @@
     border: none;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-  }
 
-  button:hover {
-    background-color: var(--secondaryBackground);
-    color: var(--secondaryText);
-  }
+    &:hover {
+      background-color: var(--secondaryBackground);
+      color: var(--secondaryText);
+    }
 
-  button:focus,
-  button:focus-visible {
-    outline: 4px auto -webkit-focus-ring-color;
+    &:focus,
+    &:focus-visible {
+      outline: 4px auto -webkit-focus-ring-color;
+    }
   }
 }
 
+// Navigation buttons styles
 .buttonDiv {
   display: flex;
   justify-content: space-around;
@@ -107,13 +111,14 @@
   }
 }
 
+// Miscellaneous styles
 .dragging {
   opacity: 0.8;
 }
 
 .transformed {
   position: relative;
-  transition: width transform 0.2s ease-in-out;
+  transition: width 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 
 .tableInfo {
@@ -123,7 +128,7 @@
   font-size: 1em;
 }
 
-/* Make this float horizontally */
+// Navigation bar styles
 .tableNav {
   background-color: var(--secondaryBackground);
   width: 100%;
@@ -132,9 +137,10 @@
   padding-bottom: 1rem;
   position: sticky;
   bottom: 0;
-  z-index: 10; /* Ensure it stays above other content */
+  z-index: 10; // Ensure it stays above other content
 }
 
+// Utility class for z-index adjustment
 .zIndex {
   z-index: 1;
 }
