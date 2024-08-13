@@ -18,7 +18,25 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
 }) => {
   const { items: draggableData } = useStore();
 
-  // Function to generate HTML content
+  // Recursive function to render items and their children in table rows
+  const renderItems = (items: any[], level = 0): string => {
+    return items
+      .map(
+        (item) => `
+          <tr>
+            <td style="padding-left: ${level * 20}px;">${item.title || ""}</td>
+            <td>${item.content || ""}</td>
+          </tr>
+          ${
+            item.children && item.children.length > 0
+              ? renderItems(item.children, level + 1)
+              : ""
+          }
+        `
+      )
+      .join("");
+  };
+
   const generateHTML = () => {
     let htmlContent = `
       <!DOCTYPE html>
@@ -33,22 +51,26 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
           .dataTitle { font-size: 1.5em; margin-bottom: 1em; }
           .draggableContainer { margin-bottom: 1em; }
           .uploadedImage { max-width: 100%; height: auto; margin-bottom: 1em; }
+          table { width: 100%; border-collapse: collapse; }
+          th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; }
         </style>
       </head>
       <body>
         <h1 class="pageTitle">${title}</h1>
         <h2 class="dataTitle">${dataTitle}</h2>
         <div class="draggableContainer">
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Content</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${renderItems(draggableData)}
+            </tbody>
+          </table>
     `;
-
-    draggableData.forEach((item: any) => {
-      htmlContent += `
-        <div>
-          <h3>${item.title}</h3>
-          <div>${item.content}</div>
-        </div>
-      `;
-    });
 
     if (imageSrc) {
       htmlContent += `
@@ -65,7 +87,6 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
     return htmlContent;
   };
 
-  // Function to handle download
   const handleDownload = () => {
     const htmlContent = generateHTML();
     const blob = new Blob([htmlContent], { type: "text/html" });

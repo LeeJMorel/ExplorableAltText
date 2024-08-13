@@ -18,7 +18,9 @@ import {
 import EditableInputCell from "./EditableInputCell";
 import TableFilter from "./TableFilter";
 import JsonToCSV from "../fileUpload/JsonToCSV";
+
 import styles from "./Table.module.scss";
+import useStore from "../../store/useStore";
 
 interface IExplorableTableProps {
   csvData: any[];
@@ -47,6 +49,7 @@ const ExplorableTable: React.FC<IExplorableTableProps> = ({
   const [data, setData] = useState<any[]>([]);
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
   const rerender = useReducer(() => ({}), {})[1];
+  const { setItems } = useStore(); // Extract setItems from the store
 
   const columns = useMemo(() => {
     if (!typeDefinition || !csvData.length) return [];
@@ -83,10 +86,24 @@ const ExplorableTable: React.FC<IExplorableTableProps> = ({
       );
 
       setData(transformedData);
+
+      // Generate draggable items and set them in the store
+      const draggableItems = headers.map(
+        (header: any, colIndex: string | number) => ({
+          id: `header-${colIndex}`,
+          title: header,
+          children: rows.map((row, rowIndex) => ({
+            id: `row-${colIndex}-${rowIndex}`,
+            title: row[colIndex],
+          })),
+        })
+      );
+
+      setItems(draggableItems);
     } else {
       setData([]);
     }
-  }, [csvData]);
+  }, [csvData, setItems]);
 
   const table = useReactTable({
     data,
