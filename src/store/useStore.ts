@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// store/useStore.ts
 import create from "zustand";
 import { DraggableItem } from "../components/draggable/Bar";
 
@@ -11,6 +10,15 @@ interface DraggableStore {
   csvData: { data: any[]; type: string }[]; // Array of CSV data and type
   addCSV: (data: any[], type: string) => void;
   removeCSV: (type: string) => void;
+  hasCSV: boolean; // Boolean flag to check if any CSVs are present
+  projectTitle: string;
+  setProjectTitle: (title: string) => void;
+  dataTitle: string;
+  setDataTitle: (title: string) => void;
+  uploadedImage: string | null;
+  setUploadedImage: (image: string | null) => void;
+  imageAltText: string;
+  setImageAltText: (altText: string) => void;
 }
 
 export const useStore = create<DraggableStore>((set) => ({
@@ -25,13 +33,42 @@ export const useStore = create<DraggableStore>((set) => ({
       items: removeItemById(state.items, itemId),
     })),
   csvData: [],
+  hasCSV: false, // Initialize the flag
   addCSV: (data, type) =>
-    set((state) => ({
-      csvData: [...state.csvData, { data, type }],
-    })),
+    set((state) => {
+      const newCsvData = [...state.csvData, { data, type }];
+      return {
+        csvData: newCsvData,
+        hasCSV: newCsvData.length > 0, // Update flag based on data length
+      };
+    }),
   removeCSV: (type) =>
-    set((state) => ({
-      csvData: state.csvData.filter((csv) => csv.type !== type),
+    set((state) => {
+      const newCsvData = state.csvData.filter((csv) => csv.type !== type);
+      return {
+        csvData: newCsvData,
+        hasCSV: newCsvData.length > 0, // Update flag based on data length
+      };
+    }),
+  projectTitle: "",
+  setProjectTitle: (title) =>
+    set(() => ({
+      projectTitle: title,
+    })),
+  dataTitle: "",
+  setDataTitle: (title) =>
+    set(() => ({
+      dataTitle: title,
+    })),
+  uploadedImage: null,
+  setUploadedImage: (image) =>
+    set(() => ({
+      uploadedImage: image,
+    })),
+  imageAltText: "",
+  setImageAltText: (altText) =>
+    set(() => ({
+      imageAltText: altText,
     })),
 }));
 

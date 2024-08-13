@@ -4,20 +4,21 @@ import styles from "./HTMLAccess.module.scss";
 import useStore from "../../store/useStore";
 import Button from "../buttons/button";
 
-interface DownloadButtonProps {
-  title: string;
-  dataTitle: string;
-  imageSrc: string | null;
-  imageAltText: string;
-}
-
-const DownloadButton: React.FC<DownloadButtonProps> = ({
-  title,
-  dataTitle,
-  imageSrc,
-  imageAltText = "Uploaded Project", // Default alt text
-}) => {
-  const { items: draggableData } = useStore();
+const DownloadButton: React.FC = () => {
+  // Get the state from the store
+  const {
+    projectTitle,
+    dataTitle,
+    uploadedImage,
+    imageAltText,
+    items: draggableData,
+  } = useStore((state) => ({
+    projectTitle: state.projectTitle,
+    dataTitle: state.dataTitle,
+    uploadedImage: state.uploadedImage,
+    imageAltText: state.imageAltText,
+    items: state.items,
+  }));
 
   // Recursive function to render items and their children in table rows
   const renderItems = (items: any[], level = 0): string => {
@@ -45,7 +46,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${title}</title>
+        <title>${projectTitle}</title>
         <style>
           body { font-family: Arial, sans-serif; margin: 20px; }
           .pageTitle { font-size: 2em; margin-bottom: 0.5em; }
@@ -57,7 +58,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
         </style>
       </head>
       <body>
-        <h1 class="pageTitle">${title}</h1>
+        <h1 class="pageTitle">${projectTitle}</h1>
         <h2 class="dataTitle">${dataTitle}</h2>
         <div class="draggableContainer">
           <table>
@@ -73,9 +74,11 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
           </table>
     `;
 
-    if (imageSrc) {
+    if (uploadedImage) {
       htmlContent += `
-        <img src="${imageSrc}" alt="${imageAltText}" class="uploadedImage" />
+        <img src="${uploadedImage}" alt="${
+        imageAltText || "Uploaded Project"
+      }" class="uploadedImage" />
       `;
     }
 

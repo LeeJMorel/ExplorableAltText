@@ -22,11 +22,6 @@ import JsonToCSV from "../fileUpload/JsonToCSV";
 import styles from "./Table.module.scss";
 import useStore from "../../store/useStore";
 
-interface IExplorableTableProps {
-  csvData: any[];
-  typeDefinition: string;
-}
-
 function useSkipper() {
   const shouldSkipRef = useRef(true);
   const shouldSkip = shouldSkipRef.current;
@@ -42,41 +37,42 @@ function useSkipper() {
   return [shouldSkip, skip] as const;
 }
 
-const ExplorableTable: React.FC<IExplorableTableProps> = ({
-  csvData,
-  typeDefinition,
-}) => {
+const ExplorableTable: React.FC = () => {
+  const { csvData, setItems } = useStore();
   const [data, setData] = useState<any[]>([]);
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
   const rerender = useReducer(() => ({}), {})[1];
-  const { setItems } = useStore(); // Extract setItems from the store
 
   const columns = useMemo(() => {
-    if (!typeDefinition || !csvData.length) return [];
+    if (csvData.length === 0) return [];
 
-    const headers = csvData[0];
+    const headers = csvData[0].data[0];
 
     return headers.map((header: string) => ({
       accessorKey: header,
       header: () => header,
     }));
-  }, [csvData, typeDefinition]);
+  }, [csvData]);
 
-  const defaultColumn: Partial<ColumnDef<any>> = {
-    cell: ({ getValue, row: { index }, column: { id } }) => (
-      <EditableInputCell
-        getValue={getValue}
-        columnId={id}
-        rowIndex={index}
-        setData={setData}
-      />
-    ),
-  };
+  const defaultColumn: Partial<ColumnDef<any>> = useMemo(
+    () => ({
+      cell: ({ getValue, row: { index }, column: { id } }) => (
+        <EditableInputCell
+          getValue={getValue}
+          columnId={id}
+          rowIndex={index}
+          setData={setData}
+        />
+      ),
+    }),
+    [setData]
+  );
 
   useEffect(() => {
-    if (csvData.length > 1) {
-      const headers = csvData[0];
-      const rows = csvData.slice(1);
+    if (csvData.length > 0) {
+      const { data } = csvData[0];
+      const headers = data[0];
+      const rows = data.slice(1);
 
       const transformedData = rows.map((row) =>
         headers.reduce((acc: any, header: string, index: number) => {

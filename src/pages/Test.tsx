@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import DropCSV from "../components/fileUpload/DropCSV";
 import ExplorableTable from "../components/table/ExplorableTable";
@@ -8,22 +7,28 @@ import DraggableContainer from "../components/draggable/DraggableContainer";
 import DownloadButton from "../components/HTMLAccess/DownloadButton";
 import useStore from "../store/useStore";
 
-function Test(this: any) {
-  const [projectTitle, setProjectTitle] = useState<string>("");
-  const [dataTitle, setDataTitle] = useState<string>("");
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-  const [imageAltText, setImageAltText] = useState<string>("");
-  const [csvData, setCsvData] = useState<any[]>([]);
-  const [typeDefinition, setTypeDefinition] = useState<string>("");
-  const storeCsvData = useStore((state) => state.csvData);
-
-  useEffect(() => {
-    if (storeCsvData.length > 0) {
-      const latestCSV = storeCsvData[storeCsvData.length - 1];
-      setCsvData(latestCSV.data);
-      setTypeDefinition(latestCSV.type);
-    }
-  }, [storeCsvData]);
+function Test() {
+  const {
+    projectTitle,
+    setProjectTitle,
+    dataTitle,
+    setDataTitle,
+    uploadedImage,
+    setUploadedImage,
+    imageAltText,
+    setImageAltText,
+    hasCSV,
+  } = useStore((state) => ({
+    projectTitle: state.projectTitle,
+    setProjectTitle: state.setProjectTitle,
+    dataTitle: state.dataTitle,
+    setDataTitle: state.setDataTitle,
+    uploadedImage: state.uploadedImage,
+    setUploadedImage: state.setUploadedImage,
+    imageAltText: state.imageAltText,
+    setImageAltText: state.setImageAltText,
+    hasCSV: state.hasCSV,
+  }));
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProjectTitle(event.target.value);
@@ -35,7 +40,7 @@ function Test(this: any) {
     setDataTitle(event.target.value);
   };
 
-  const onDrop = (acceptedFiles: any) => {
+  const onDrop = (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     const reader = new FileReader();
     reader.onload = () => {
@@ -52,17 +57,15 @@ function Test(this: any) {
     setImageAltText(event.target.value);
   };
 
+  useEffect(() => {
+    // Example: reset project title when CSV is removed
+    if (!hasCSV) {
+      setProjectTitle("");
+    }
+  }, [hasCSV, setProjectTitle]);
+
   return (
     <div className={styles.projectPage}>
-      {/* <ModalCard
-        title="Success"
-        description="Your payment has been successfully processed. We have emailed your receipt."
-        buttons={[
-          <Button key="ok">OK</Button>,
-          <Button key="cancel">Cancel</Button>,
-        ]}
-      />  */}
-
       <div className={styles.leftSide}>
         <input
           id="projectTitle"
@@ -74,14 +77,14 @@ function Test(this: any) {
           placeholder="Enter your project title here"
         />
         <div className={styles.csvContainer}>
-          {csvData.length > 0 && (
+          {hasCSV && (
             <input
               id="dataTitle"
               type="text"
               value={dataTitle}
               onChange={handleDataTitleChange}
               className={styles.dataInput}
-              aria-labelledby="projectTitleLabel"
+              aria-labelledby="dataTitleLabel"
               placeholder="Enter your data title here"
             />
           )}
@@ -89,10 +92,7 @@ function Test(this: any) {
             <DropCSV />
           </div>
         </div>
-        {csvData.length > 0 && (
-          <ExplorableTable csvData={csvData} typeDefinition={typeDefinition} />
-        )}
-
+        {hasCSV && <ExplorableTable />}
         <div {...getRootProps()} className={styles.dropzone}>
           <input {...getInputProps()} />
           <p>
@@ -110,12 +110,7 @@ function Test(this: any) {
         />
       </div>
       <div className={styles.rightSide}>
-        <DownloadButton
-          title={projectTitle}
-          dataTitle={dataTitle}
-          imageSrc={uploadedImage}
-          imageAltText={imageAltText}
-        />
+        <DownloadButton />
         <h1 className={styles.renderedTitle}>{projectTitle}</h1>
         <h1 className={styles.renderedTitle}>{dataTitle}</h1>
         <div className={styles.draggableContainer}>
