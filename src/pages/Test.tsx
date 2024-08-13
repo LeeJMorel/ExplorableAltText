@@ -6,6 +6,8 @@ import styles from "./Pages.module.scss";
 import DraggableContainer from "../components/draggable/DraggableContainer";
 import DownloadButton from "../components/HTMLAccess/DownloadButton";
 import useStore from "../store/useStore";
+//import DownloadStoreButton from "../components/buttons/DownloadStoreButton";
+//import UploadStoreButton from "../components/buttons/UploadStoreButton";
 
 function Test() {
   const {
@@ -108,6 +110,9 @@ function Test() {
           className={styles.altTextInput}
           placeholder="Enter alt text for the image"
         />
+        {/* <h1>Manage Store Data</h1>
+        <DownloadStoreButton />
+        <UploadStoreButton /> */}
       </div>
       <div className={styles.rightSide}>
         <DownloadButton />
