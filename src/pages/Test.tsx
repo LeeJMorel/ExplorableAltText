@@ -5,9 +5,8 @@ import { useDropzone } from "react-dropzone";
 import DropCSV from "../components/fileUpload/DropCSV";
 import ExplorableTable from "../components/table/ExplorableTable";
 import styles from "./Pages.module.scss";
-import DraggableContainer, {
-  DraggableItem,
-} from "../components/draggable/DraggableContainer";
+import DraggableContainer from "../components/draggable/DraggableContainer";
+import { DraggableItem } from "../components/draggable/Bar";
 
 // import ModalCard from "../components/cards/ModalCard";
 // import Button from "../components/buttons/button";
