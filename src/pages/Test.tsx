@@ -5,20 +5,32 @@ import { useDropzone } from "react-dropzone";
 import DropCSV from "../components/fileUpload/DropCSV";
 import ExplorableTable from "../components/table/ExplorableTable";
 import styles from "./Pages.module.scss";
-import DraggableComponent, {
+import DraggableContainer, {
   DraggableItem,
-} from "../components/draggable/DraggableComponent";
+} from "../components/draggable/DraggableContainer";
 
 // import ModalCard from "../components/cards/ModalCard";
 // import Button from "../components/buttons/button";
 
 function Test(this: any) {
   const initialData: DraggableItem[] = [
-    { id: "1", title: "Foo", content: "Content Foo", children: [] },
-    { id: "2", title: "Bar", content: "Content Bar", children: [] },
-    { id: "3", title: "Foof", content: "Content Foof", children: [] },
-    { id: "4", title: "Ban", content: "Content Ban", children: [] },
-    { id: "5", title: "Bud", content: "Content Bud", children: [] },
+    {
+      id: "1",
+      title: "Item 1",
+      content: <div>Content for Item 1</div>,
+      children: [
+        {
+          id: "1-1",
+          title: "Item 1-1",
+          content: <div>Content for Item 1-1</div>,
+        },
+      ],
+    },
+    {
+      id: "2",
+      title: "Item 2",
+      content: <div>Content for Item 2</div>,
+    },
   ];
 
   const [csvData, setCSVData] = useState<any[]>([]);
@@ -126,7 +138,7 @@ function Test(this: any) {
         <h1 className={styles.renderedTitle}>{projectTitle}</h1>
         <h1 className={styles.renderedTitle}>{dataTitle}</h1>
         <div className={styles.draggableContainer}>
-          <DraggableComponent initialData={initialData} />
+          <DraggableContainer initialData={initialData} />
         </div>
         {uploadedImage && (
           <img
