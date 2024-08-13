@@ -65,31 +65,6 @@ function Test(this: any) {
     setImageAltText(event.target.value);
   };
 
-  const [data, setData] = useState<DraggableItem[]>(initialData);
-
-  const onDragEnd = (result: any) => {
-    // Logic for reordering and nesting goes here
-    const { destination, source } = result;
-
-    if (!destination) return;
-
-    // Handle reordering here
-    const reorderedData = reorder(data, source.index, destination.index);
-
-    setData(reorderedData);
-  };
-
-  const reorder = (
-    list: DraggableItem[],
-    startIndex: number,
-    endIndex: number
-  ) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-    return result;
-  };
-
   return (
     <div className={styles.projectPage}>
       {/* <ModalCard
@@ -151,7 +126,7 @@ function Test(this: any) {
         <h1 className={styles.renderedTitle}>{projectTitle}</h1>
         <h1 className={styles.renderedTitle}>{dataTitle}</h1>
         <div className={styles.draggableContainer}>
-          <DraggableComponent data={data} onDragEnd={onDragEnd} />
+          <DraggableComponent initialData={initialData} />
         </div>
         {uploadedImage && (
           <img
