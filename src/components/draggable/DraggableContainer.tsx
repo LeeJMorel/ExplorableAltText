@@ -21,8 +21,8 @@ const DraggableContainer: React.FC<DraggableContainerProps> = ({
     const draggedItem = data[dragIndex];
     if (!draggedItem) return; // Safety check
 
-    const updatedData = [...data];
-    updatedData.splice(dragIndex, 1); // Remove dragged item from its original position
+    // Remove the dragged item from its original position
+    const updatedData = removeItemFromParent(data, draggedItem.id);
 
     if (targetId) {
       // Add to a target item
@@ -45,6 +45,34 @@ const DraggableContainer: React.FC<DraggableContainerProps> = ({
     }
 
     setData(updatedData); // Update the state with the modified data
+  };
+
+  const removeItemFromParent = (
+    list: DraggableItem[],
+    itemId: string
+  ): DraggableItem[] => {
+    return list.reduce((result, item) => {
+      // Skip this item if it's the one being moved
+      if (item.id === itemId) return result;
+
+      // Recursively remove the item from its children's list
+      if (item.children) {
+        item.children = removeItemFromParent(item.children, itemId);
+      }
+
+      result.push(item); // Add the item to the result
+      return result;
+    }, [] as DraggableItem[]);
+  };
+
+  const addChild = (parentId: string, child: DraggableItem) => {
+    const updatedData = [...data];
+    const parent = findItemById(updatedData, parentId);
+    if (parent) {
+      if (!parent.children) parent.children = [];
+      parent.children.push(child);
+      setData(updatedData);
+    }
   };
 
   const findItemById = (
@@ -70,7 +98,7 @@ const DraggableContainer: React.FC<DraggableContainerProps> = ({
             item={item}
             index={index}
             moveBar={moveBar}
-            addChild={() => {}}
+            addChild={addChild}
             parentId="" // Top-level bars have no parentId
           />
         ))}

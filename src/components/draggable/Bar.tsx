@@ -14,7 +14,11 @@ export interface DraggableItem {
 interface BarProps {
   item: DraggableItem;
   index: number;
-  moveBar: (dragIndex: number, hoverIndex: number, targetId: string) => void;
+  moveBar: (
+    dragIndex: number,
+    hoverIndex: number,
+    targetId: string | null
+  ) => void;
   addChild: (parentId: string, child: DraggableItem) => void;
   parentId: string;
 }
@@ -35,7 +39,7 @@ const Bar: React.FC<BarProps> = ({
     accept: "BAR",
     hover: (draggedItem: { index: number; id: string; parentId: string }) => {
       if (draggedItem.id !== item.id) {
-        // Move bar depending on the hover state
+        // Handle nesting or denesting
         moveBar(draggedItem.index, index, item.id);
       }
     },
@@ -48,24 +52,27 @@ const Bar: React.FC<BarProps> = ({
       </div>
       <div className={styles.titleContainer}>
         <Ariakit.DisclosureProvider>
-          <Ariakit.Disclosure className="disclosure-button">
+          <Ariakit.Disclosure className={styles.disclosureButton}>
             {item.title}
           </Ariakit.Disclosure>
-          <Ariakit.DisclosureContent className="disclosure-content">
-            {item.children && (
-              <div className={styles.nestedContainer}>
-                {item.children.map((child, childIndex) => (
-                  <Bar
-                    key={child.id}
-                    item={child}
-                    index={childIndex}
-                    moveBar={moveBar}
-                    addChild={addChild}
-                    parentId={item.id}
-                  />
-                ))}
-              </div>
-            )}
+          <Ariakit.DisclosureContent className={styles.disclosureContent}>
+            <div>
+              {item.content}
+              {item.children && (
+                <div className={styles.nestedContainer}>
+                  {item.children.map((child, childIndex) => (
+                    <Bar
+                      key={child.id}
+                      item={child}
+                      index={childIndex}
+                      moveBar={moveBar}
+                      addChild={addChild}
+                      parentId={item.id}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </Ariakit.DisclosureContent>
         </Ariakit.DisclosureProvider>
       </div>
