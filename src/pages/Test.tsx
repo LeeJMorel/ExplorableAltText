@@ -5,16 +5,20 @@ import { useDropzone } from "react-dropzone";
 import DropCSV from "../components/fileUpload/DropCSV";
 import ExplorableTable from "../components/table/ExplorableTable";
 import styles from "./Pages.module.scss";
-import DraggableComponent from "../components/draggable/DraggableComponent";
+import DraggableComponent, {
+  DraggableItem,
+} from "../components/draggable/DraggableComponent";
 
 // import ModalCard from "../components/cards/ModalCard";
 // import Button from "../components/buttons/button";
 
 function Test(this: any) {
-  const data = [
-    { title: "Foo", content: <div>Stuff 1</div> },
-    { title: "Bar", content: <div>Stuff 2</div> },
-    { title: "Baz", content: <div>Stuff 3</div> },
+  const initialData: DraggableItem[] = [
+    { id: "1", title: "Foo", content: "Content Foo", children: [] },
+    { id: "2", title: "Bar", content: "Content Bar", children: [] },
+    { id: "3", title: "Foof", content: "Content Foof", children: [] },
+    { id: "4", title: "Ban", content: "Content Ban", children: [] },
+    { id: "5", title: "Bud", content: "Content Bud", children: [] },
   ];
 
   const [csvData, setCSVData] = useState<any[]>([]);
@@ -59,6 +63,31 @@ function Test(this: any) {
 
   const handleAltTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setImageAltText(event.target.value);
+  };
+
+  const [data, setData] = useState<DraggableItem[]>(initialData);
+
+  const onDragEnd = (result: any) => {
+    // Logic for reordering and nesting goes here
+    const { destination, source } = result;
+
+    if (!destination) return;
+
+    // Handle reordering here
+    const reorderedData = reorder(data, source.index, destination.index);
+
+    setData(reorderedData);
+  };
+
+  const reorder = (
+    list: DraggableItem[],
+    startIndex: number,
+    endIndex: number
+  ) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    return result;
   };
 
   return (
@@ -122,7 +151,7 @@ function Test(this: any) {
         <h1 className={styles.renderedTitle}>{projectTitle}</h1>
         <h1 className={styles.renderedTitle}>{dataTitle}</h1>
         <div className={styles.draggableContainer}>
-          <DraggableComponent data={data} />
+          <DraggableComponent data={data} onDragEnd={onDragEnd} />
         </div>
         {uploadedImage && (
           <img
