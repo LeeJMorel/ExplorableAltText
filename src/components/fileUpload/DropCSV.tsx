@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// components/fileUpload/DropCSV.tsx
 import { useState } from "react";
 import {
   useCSVReader,
@@ -7,11 +8,8 @@ import {
 } from "react-papaparse";
 import classNames from "classnames";
 import styles from "./FileUpload.module.scss";
-import { generateCSVType } from "../../utilities";
-
-interface IDropCSVProps {
-  onCSVUpload: (data: any[], type: string) => void;
-}
+import useStore from "../../store/useStore";
+import { generateCSVType } from "../../utilities/generateCSVType";
 
 const DEFAULT_REMOVE_HOVER_COLOR = "#A01919";
 const REMOVE_HOVER_COLOR_LIGHT = lightenDarkenColor(
@@ -19,22 +17,31 @@ const REMOVE_HOVER_COLOR_LIGHT = lightenDarkenColor(
   40
 );
 
-function DropCSV({ onCSVUpload }: IDropCSVProps) {
+function DropCSV() {
   const { CSVReader } = useCSVReader();
   const [zoneHover, setZoneHover] = useState(false);
   const [removeHoverColor, setRemoveHoverColor] = useState(
     DEFAULT_REMOVE_HOVER_COLOR
   );
+  const addCSV = useStore((state) => state.addCSV);
+  const removeCSV = useStore((state) => state.removeCSV);
+
+  const handleCSVUpload = (results: any) => {
+    setZoneHover(false);
+    const csvType = generateCSVType(results.data); // Generate CSV type
+    addCSV(results.data, csvType); // Add CSV data and type to store
+  };
+
+  const handleRemoveFile = () => {
+    // Assuming the component knows which CSV to remove based on context or state
+    // For demonstration, we'll assume it's the most recently added CSV
+    removeCSV; // Adjust index based on your logic
+  };
 
   return (
     <CSVReader
       onUploadAccepted={(results: any) => {
-        console.log("---------------------------");
-        console.log(results);
-        console.log("---------------------------");
-        setZoneHover(false);
-        const csvType = generateCSVType(results.data); // Generate CSV type
-        onCSVUpload(results.data, csvType); // Pass CSV data and type to the parent component
+        handleCSVUpload(results);
       }}
       onDragOver={(event: DragEvent) => {
         event.preventDefault();
@@ -82,6 +89,7 @@ function DropCSV({ onCSVUpload }: IDropCSVProps) {
                       event.preventDefault();
                       setRemoveHoverColor(DEFAULT_REMOVE_HOVER_COLOR);
                     }}
+                    onClick={handleRemoveFile}
                   >
                     <Remove color={removeHoverColor} />
                   </div>

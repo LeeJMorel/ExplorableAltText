@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { generateCSVType } from "../utilities";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import DropCSV from "../components/fileUpload/DropCSV";
 import ExplorableTable from "../components/table/ExplorableTable";
@@ -9,17 +8,27 @@ import DraggableContainer from "../components/draggable/DraggableContainer";
 import DownloadButton from "../components/HTMLAccess/DownloadButton";
 import TestAddItemButton from "../components/draggable/TestAddItemButton";
 import TestRemoveItemButton from "../components/draggable/TestRemoveItemButton";
+import useStore from "../store/useStore";
 
 // import ModalCard from "../components/cards/ModalCard";
 // import Button from "../components/buttons/button";
 
 function Test(this: any) {
-  const [csvData, setCSVData] = useState<any[]>([]);
-  const [typeDefinition, setTypeDefinition] = useState<string>("");
   const [projectTitle, setProjectTitle] = useState<string>("");
   const [dataTitle, setDataTitle] = useState<string>("");
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [imageAltText, setImageAltText] = useState<string>("");
+  const [csvData, setCsvData] = useState<any[]>([]);
+  const [typeDefinition, setTypeDefinition] = useState<string>("");
+  const storeCsvData = useStore((state) => state.csvData);
+
+  useEffect(() => {
+    if (storeCsvData.length > 0) {
+      const latestCSV = storeCsvData[storeCsvData.length - 1];
+      setCsvData(latestCSV.data);
+      setTypeDefinition(latestCSV.type);
+    }
+  }, [storeCsvData]);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProjectTitle(event.target.value);
@@ -29,16 +38,6 @@ function Test(this: any) {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setDataTitle(event.target.value);
-  };
-
-  const handleCSVUpload = (data: any[]) => {
-    // Handle the parsed CSV data here
-    setCSVData(data);
-
-    // Generate the type definition dynamically
-    const dynamicTypeDefinition = generateCSVType(data);
-    setTypeDefinition(dynamicTypeDefinition);
-    console.log("Type Definition:", dynamicTypeDefinition);
   };
 
   const onDrop = (acceptedFiles: any) => {
@@ -95,7 +94,7 @@ function Test(this: any) {
             />
           )}
           <div className={styles.dropCSV}>
-            <DropCSV onCSVUpload={handleCSVUpload} />
+            <DropCSV />
           </div>
         </div>
         {csvData.length > 0 && (
