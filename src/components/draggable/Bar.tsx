@@ -1,3 +1,4 @@
+// components/draggable/Bar.tsx
 import React from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { FaBars } from "react-icons/fa";

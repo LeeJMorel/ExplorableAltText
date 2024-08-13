@@ -1,28 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import Bar, { DraggableItem } from "./Bar"; // Import Bar component
+import Bar, { DraggableItem } from "./Bar"; // Adjust the import path as needed
 import styles from "./Draggable.module.scss";
+import useStore from "../../store/useStore";
 
-interface DraggableContainerProps {
-  initialData: DraggableItem[];
-}
+const DraggableContainer: React.FC = () => {
+  const { items, setItems } = useStore();
 
-const DraggableContainer: React.FC<DraggableContainerProps> = ({
-  initialData,
-}) => {
-  const [data, setData] = useState<DraggableItem[]>(initialData);
+  // Effect to initialize the store with data when it changes
+  useEffect(() => {
+    // You may want to fetch initial data or handle updates differently
+  }, []);
 
   const moveBar = (
     dragIndex: number,
     hoverIndex: number,
     targetId: string | null
   ) => {
-    const draggedItem = data[dragIndex];
+    const draggedItem = items[dragIndex];
     if (!draggedItem) return; // Safety check
 
     // Remove the dragged item from its original position
-    const updatedData = removeItemFromParent(data, draggedItem.id);
+    const updatedData = removeItemFromParent(items, draggedItem.id);
 
     if (targetId) {
       // Add to a target item
@@ -44,7 +44,7 @@ const DraggableContainer: React.FC<DraggableContainerProps> = ({
       updatedData.push(draggedItem); // Add dragged item to the top level
     }
 
-    setData(updatedData); // Update the state with the modified data
+    setItems(updatedData); // Update the Zustand store with the modified data
   };
 
   const removeItemFromParent = (
@@ -66,12 +66,12 @@ const DraggableContainer: React.FC<DraggableContainerProps> = ({
   };
 
   const addChild = (parentId: string, child: DraggableItem) => {
-    const updatedData = [...data];
+    const updatedData = [...items];
     const parent = findItemById(updatedData, parentId);
     if (parent) {
       if (!parent.children) parent.children = [];
       parent.children.push(child);
-      setData(updatedData);
+      setItems(updatedData);
     }
   };
 
@@ -92,7 +92,7 @@ const DraggableContainer: React.FC<DraggableContainerProps> = ({
   return (
     <DndProvider backend={HTML5Backend}>
       <div className={styles.container}>
-        {data.map((item, index) => (
+        {items.map((item, index) => (
           <Bar
             key={item.id}
             item={item}

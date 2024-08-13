@@ -6,32 +6,14 @@ import DropCSV from "../components/fileUpload/DropCSV";
 import ExplorableTable from "../components/table/ExplorableTable";
 import styles from "./Pages.module.scss";
 import DraggableContainer from "../components/draggable/DraggableContainer";
-import { DraggableItem } from "../components/draggable/Bar";
+import DownloadButton from "../components/HTMLAccess/DownloadButton";
+import TestAddItemButton from "../components/draggable/TestAddItemButton";
+import TestRemoveItemButton from "../components/draggable/TestRemoveItemButton";
 
 // import ModalCard from "../components/cards/ModalCard";
 // import Button from "../components/buttons/button";
 
 function Test(this: any) {
-  const initialData: DraggableItem[] = [
-    {
-      id: "1",
-      title: "Item 1",
-      content: <div>Content for Item 1</div>,
-      children: [
-        {
-          id: "1-1",
-          title: "Item 1-1",
-          content: <div>Content for Item 1-1</div>,
-        },
-      ],
-    },
-    {
-      id: "2",
-      title: "Item 2",
-      content: <div>Content for Item 2</div>,
-    },
-  ];
-
   const [csvData, setCSVData] = useState<any[]>([]);
   const [typeDefinition, setTypeDefinition] = useState<string>("");
   const [projectTitle, setProjectTitle] = useState<string>("");
@@ -97,6 +79,9 @@ function Test(this: any) {
           aria-labelledby="projectTitleLabel"
           placeholder="Enter your project title here"
         />
+        <h1>Test Add and Remove Items</h1>
+        <TestAddItemButton />
+        <TestRemoveItemButton itemId="new-id" />
         <div className={styles.csvContainer}>
           {csvData.length > 0 && (
             <input
@@ -134,10 +119,16 @@ function Test(this: any) {
         />
       </div>
       <div className={styles.rightSide}>
+        <DownloadButton
+          title={projectTitle}
+          dataTitle={dataTitle}
+          imageSrc={uploadedImage}
+          imageAltText={imageAltText}
+        />
         <h1 className={styles.renderedTitle}>{projectTitle}</h1>
         <h1 className={styles.renderedTitle}>{dataTitle}</h1>
         <div className={styles.draggableContainer}>
-          <DraggableContainer initialData={initialData} />
+          <DraggableContainer />
         </div>
         {uploadedImage && (
           <img

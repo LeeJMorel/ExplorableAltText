@@ -1,0 +1,32 @@
+.renderedPage {
+  padding: 20px;
+}
+
+.pageTitle {
+  font-size: 2em;
+  margin-bottom: 0.5em;
+}
+
+.dataTitle {
+  font-size: 1.5em;
+  margin-bottom: 1em;
+}
+
+.draggableContainer {
+  margin-bottom: 1em;
+}
+
+.uploadedImage {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 1em;
+}
+
+.actionButton {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
