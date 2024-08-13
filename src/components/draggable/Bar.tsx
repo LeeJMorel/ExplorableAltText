@@ -14,22 +14,29 @@ export interface DraggableItem {
 interface BarProps {
   item: DraggableItem;
   index: number;
-  moveBar: (dragIndex: number, hoverIndex: number) => void;
+  moveBar: (dragIndex: number, hoverIndex: number, targetId: string) => void;
   addChild: (parentId: string, child: DraggableItem) => void;
+  parentId: string;
 }
 
-const Bar: React.FC<BarProps> = ({ item, index, moveBar, addChild }) => {
+const Bar: React.FC<BarProps> = ({
+  item,
+  index,
+  moveBar,
+  addChild,
+  parentId,
+}) => {
   const [, ref] = useDrag({
     type: "BAR",
-    item: { index, id: item.id },
+    item: { index, id: item.id, parentId },
   });
 
   const [, drop] = useDrop({
     accept: "BAR",
-    hover: (draggedItem: { index: number; id: string }) => {
-      if (draggedItem.index !== index) {
-        moveBar(draggedItem.index, index);
-        draggedItem.index = index; // Update drag index after move
+    hover: (draggedItem: { index: number; id: string; parentId: string }) => {
+      if (draggedItem.id !== item.id) {
+        // Move bar depending on the hover state
+        moveBar(draggedItem.index, index, item.id);
       }
     },
   });
@@ -41,11 +48,10 @@ const Bar: React.FC<BarProps> = ({ item, index, moveBar, addChild }) => {
       </div>
       <div className={styles.titleContainer}>
         <Ariakit.DisclosureProvider>
-          <Ariakit.Disclosure className={styles.disclosureButton}>
+          <Ariakit.Disclosure className="disclosure-button">
             {item.title}
           </Ariakit.Disclosure>
-          <Ariakit.DisclosureContent className={styles.disclosureContent}>
-            {item.content}
+          <Ariakit.DisclosureContent className="disclosure-content">
             {item.children && (
               <div className={styles.nestedContainer}>
                 {item.children.map((child, childIndex) => (
@@ -55,6 +61,7 @@ const Bar: React.FC<BarProps> = ({ item, index, moveBar, addChild }) => {
                     index={childIndex}
                     moveBar={moveBar}
                     addChild={addChild}
+                    parentId={item.id}
                   />
                 ))}
               </div>

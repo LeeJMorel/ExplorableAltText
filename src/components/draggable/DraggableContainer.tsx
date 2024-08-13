@@ -13,22 +13,38 @@ const DraggableContainer: React.FC<DraggableContainerProps> = ({
 }) => {
   const [data, setData] = useState<DraggableItem[]>(initialData);
 
-  const moveBar = (dragIndex: number, hoverIndex: number) => {
+  const moveBar = (
+    dragIndex: number,
+    hoverIndex: number,
+    targetId: string | null
+  ) => {
     const draggedItem = data[dragIndex];
-    const updatedData = [...data];
-    updatedData.splice(dragIndex, 1);
-    updatedData.splice(hoverIndex, 0, draggedItem);
-    setData(updatedData);
-  };
+    if (!draggedItem) return; // Safety check
 
-  const addChild = (parentId: string, child: DraggableItem) => {
     const updatedData = [...data];
-    const parent = findItemById(updatedData, parentId);
-    if (parent) {
-      if (!parent.children) parent.children = [];
-      parent.children.push(child);
-      setData(updatedData);
+    updatedData.splice(dragIndex, 1); // Remove dragged item from its original position
+
+    if (targetId) {
+      // Add to a target item
+      const targetItem = findItemById(updatedData, targetId);
+      if (!targetItem) return; // Safety check
+
+      // Ensure targetItem has children
+      if (!targetItem.children) targetItem.children = [];
+
+      // Check if draggedItem already exists in the targetItem's children
+      const isAlreadyChild = targetItem.children.some(
+        (item) => item.id === draggedItem.id
+      );
+      if (!isAlreadyChild) {
+        targetItem.children.push(draggedItem); // Add the dragged item as a child of the target item
+      }
+    } else {
+      // Move to the top level
+      updatedData.push(draggedItem); // Add dragged item to the top level
     }
+
+    setData(updatedData); // Update the state with the modified data
   };
 
   const findItemById = (
@@ -54,7 +70,8 @@ const DraggableContainer: React.FC<DraggableContainerProps> = ({
             item={item}
             index={index}
             moveBar={moveBar}
-            addChild={addChild}
+            addChild={() => {}}
+            parentId="" // Top-level bars have no parentId
           />
         ))}
       </div>
