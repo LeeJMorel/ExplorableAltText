@@ -2,6 +2,7 @@
 import React from "react";
 import styles from "./HTMLAccess.module.scss";
 import useStore from "../../store/useStore";
+import Button from "../buttons/button";
 
 interface DownloadButtonProps {
   title: string;
@@ -99,9 +100,9 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
   };
 
   return (
-    <button className={styles.actionButton} onClick={handleDownload}>
+    <Button className={styles.actionButton} onClick={handleDownload}>
       Download HTML
-    </button>
+    </Button>
   );
 };
 

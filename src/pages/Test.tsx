@@ -6,12 +6,7 @@ import ExplorableTable from "../components/table/ExplorableTable";
 import styles from "./Pages.module.scss";
 import DraggableContainer from "../components/draggable/DraggableContainer";
 import DownloadButton from "../components/HTMLAccess/DownloadButton";
-import TestAddItemButton from "../components/draggable/TestAddItemButton";
-import TestRemoveItemButton from "../components/draggable/TestRemoveItemButton";
 import useStore from "../store/useStore";
-
-// import ModalCard from "../components/cards/ModalCard";
-// import Button from "../components/buttons/button";
 
 function Test(this: any) {
   const [projectTitle, setProjectTitle] = useState<string>("");
@@ -78,9 +73,6 @@ function Test(this: any) {
           aria-labelledby="projectTitleLabel"
           placeholder="Enter your project title here"
         />
-        <h1>Test Add and Remove Items</h1>
-        <TestAddItemButton />
-        <TestRemoveItemButton itemId="new-id" />
         <div className={styles.csvContainer}>
           {csvData.length > 0 && (
             <input

@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import styles from "./button.module.scss";
+import { Button } from "@ariakit/react/button";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
@@ -16,16 +17,10 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 }) => {
   const buttonClass = classNames(styles.button, className);
 
-  const handleClick = () => {
-    if (onClick) {
-      onClick();
-    }
-  };
-
   return (
-    <button className={buttonClass} onClick={handleClick} {...props}>
+    <Button className={buttonClass} onClick={onClick} {...props}>
       {children}
-    </button>
+    </Button>
   );
 };
 
