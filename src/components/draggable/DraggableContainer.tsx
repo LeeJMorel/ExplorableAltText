@@ -15,7 +15,7 @@ const DraggableContainer: React.FC = () => {
 
   const moveBar = (
     dragIndex: number,
-    hoverIndex: number,
+    _hoverIndex: number,
     targetId: string | null
   ) => {
     const draggedItem = items[dragIndex];
