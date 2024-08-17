@@ -26,7 +26,7 @@ function App() {
             <Route index element={<HomeMain />} />
             <Route path="details/:faqId" element={<HomeDetail />} />
           </Route>
-          <Route path="/project" element={<Project />} />
+          <Route path="/projects" element={<Project />} />
         </Routes>
       </main>
       <Footer />

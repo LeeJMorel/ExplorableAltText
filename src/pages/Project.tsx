@@ -9,7 +9,7 @@ import useStore from "../store/useStore";
 //import DownloadStoreButton from "../components/buttons/DownloadStoreButton";
 //import UploadStoreButton from "../components/buttons/UploadStoreButton";
 
-function Test() {
+function Project() {
   const {
     projectTitle,
     setProjectTitle,
@@ -133,4 +133,4 @@ function Test() {
   );
 }
 
-export default Test;
+export default Project;

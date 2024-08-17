@@ -12,9 +12,6 @@ const NavBar = () => {
         <NavLink to="/projects" className={styles.navLink}>
           <Button className={styles.navButton}>Projects</Button>
         </NavLink>
-        <NavLink to="/test" className={styles.navLink}>
-          <Button className={styles.navButton}>Test</Button>
-        </NavLink>
       </nav>
     </header>
   );
